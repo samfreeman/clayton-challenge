@@ -54,7 +54,7 @@ class HomesService {
 					&& this._matchesSearchFilter(home))
 				.map(home => ({
 					...home,
-					Description: `${home.Description[0]}${home.Description.slice(1).toLowerCase()}`
+					Description: this._fixDescription(home.Description)
 				})))
 	}
 
@@ -63,6 +63,15 @@ class HomesService {
 		return !filter
 			|| home.Description.toLowerCase().includes(filter)
 			|| home.HomeId.toLowerCase().includes(filter)
+	}
+
+	private _fixDescription = (description: string): string => {
+		return description
+			.split(' ')
+			.map(part => part.length > 2 && part[0] >= 'A' && part[0] <= 'Z'
+				? `${part[0]}${part.slice(1).toLowerCase()}`
+				: part)
+			.join(' ')
 	}
 }
 
